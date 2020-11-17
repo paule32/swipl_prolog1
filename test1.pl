@@ -44,31 +44,29 @@ human(X) :-
 	;	human_female(X) -> writeStr([X, ' is found as female...   ok'])
 	;					   writeStr([X, ' is not found!']).
 	
-have_heads(X)   :- X is 1  -> true ; !.
-have_eyes(X)    :- X is 2  -> true ; !.
-have_necks(X)   :- X is 1  -> true ; !.
-have_arms(X)    :- X is 2  -> true ; !.
-have_hands(X)   :- X is 2  -> true ; !.
-have_fingers(X) :- X is 10 -> true ; !.
-have_legs(X)    :- X is 2  -> true ; !.
-
-have_foots(X,Y) :- X is true, Y is true -> true ; !.
-				   
-have_foots(X)   :- X is 2  -> true ; !.
-have_teeth(X)   :- X is 10 -> true ; !.
-
-each_foot(X,Y)  :- human(X), Y is 10 -> true ; !.
+have_heads(X,Y)   :- Y is 1  -> writeStr([X, ' have '      , Y, ' head...            ok']) ; writeStr(['query: heads   wrong']), halt(1).
+have_eyes(X,Y)    :- Y is 2  -> writeStr([X, ' have '      , Y, ' eyes...            ok']) ; writeStr(['query: eyes    wrong']), halt(1).
+have_necks(X,Y)   :- Y is 1  -> writeStr([X, ' have '      , Y, ' necks...           ok']) ; writeStr(['query: necks   wrong']), halt(1).
+have_arms(X,Y)    :- Y is 2  -> writeStr([X, ' have '      , Y, ' arms...            ok']) ; writeStr(['query: arms    wrong']), halt(1).
+have_hands(X,Y)   :- Y is 2  -> writeStr([X, ' have '      , Y, ' hands...           ok']) ; writeStr(['query: hands   wrong']), halt(1).
+have_fingers(X,Y) :- Y is 10 -> writeStr([X, ' hands have ', Y, ' fingers...         ok']) ; writeStr(['query: fingers wrong']), halt(1).
+have_legs(X,Y)    :- Y is 2  -> writeStr([X, ' have '      , Y, ' legs...            ok']) ; writeStr(['query: legs    wrong']), halt(1).
+have_foots(X,Y)   :- Y is 2  -> writeStr([X, ' have '      , Y, ' foots...           ok']) ; writeStr(['query: foots   wrong']), halt(1).
+have_teeths(X,Y)  :- Y is 10 -> writeStr([X, ' have '      , Y, ' teeths...          ok']) ; writeStr(['query: teeth   wrong']), halt(1).
 
 person(X) :-
 		human(X),
-			have_heads(1)    -> writeStr([X, ' have 1  head...          ok']),
-			have_eyes(2)     -> writeStr([X, ' have 2  eyes...          ok']),
-			have_necks(1)    -> writeStr([X, ' have 1  necks...         ok']),
-			have_arms(2)     -> writeStr([X, ' have 2  arms...          ok']),
-			have_hands(2)    -> writeStr([X, ' have 2  hands...         ok']),
-			have_fingers(10) -> writeStr([X, ' have 10 fingers...       ok']),
-			have_legs(2)     -> writeStr([X, ' have 2  legs...          ok']),
-			have_foots(2,each_foot(X,have_teeth(10)))    -> writeStr([X, ' have 2  foots...         ok'])
+		(	have_heads(X,1),
+			have_eyes(X,2),
+			have_necks(X,1),
+		(	have_arms(X,2),
+				have_hands(X,2),
+				have_fingers(X,10)
+		),
+			have_legs(X,2),	
+		(	have_foots(X,2),
+				have_teeths(X,10)
+		)	)
 	;	writeStr(['query is wrong!']).
 
 %% ----------------------------------------------- %%
@@ -85,6 +83,11 @@ strcat(StringList, Result) :-
 writeStr(StringList) :-
 	strcat(StringList, Z),
 	writeln(Z).
+
+?- format('+~`-t~78|+ ~n',[]).
+?- format('| Name~t~20|| Type~t~40|| Count~t~60|| Extra~t~78||~n',[]).
+?- format('+~`-t~78|+ ~n',[]).
+
 
 ?- human(greta).
 ?- human(paul).
