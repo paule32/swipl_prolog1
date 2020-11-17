@@ -39,37 +39,21 @@ human_male(franz).
 human_male(paul).
 human_male(fritz).
 
+human(X,Y) :-
+		(human_male(X)  , Y -> true, writeln(X))
+	;	(human_female(X), Y -> true, writeln(X))
+	;	(	strcat([X,' is not found!'],Z),
+			writeln(Z)
+		).
 human(X) :-
-		human_male(X)   -> writeStr([X, ' is found as male...     ok'])
-	;	human_female(X) -> writeStr([X, ' is found as female...   ok'])
-	;					   writeStr([X, ' is not found!']).
-	
-have_heads(X)   :- X is 1  -> true ; !.
-have_eyes(X)    :- X is 2  -> true ; !.
-have_necks(X)   :- X is 1  -> true ; !.
-have_arms(X)    :- X is 2  -> true ; !.
-have_hands(X)   :- X is 2  -> true ; !.
-have_fingers(X) :- X is 10 -> true ; !.
-have_legs(X)    :- X is 2  -> true ; !.
+	(Y   = member(X,human_male(X))   -> true, writeln(Y)) ;
+	(Y   = member(X,human_female(X)) -> true, writeln(Y)) ;
+	(Y \== member(X,human_male(X))   -> false, writeln(Y)).
 
-have_foots(X,Y) :- X is true, Y is true -> true ; !.
-				   
-have_foots(X)   :- X is 2  -> true ; !.
-have_teeth(X)   :- X is 10 -> true ; !.
-
-each_foot(X,Y)  :- human(X), Y is 10 -> true ; !.
-
-person(X) :-
-		human(X),
-			have_heads(1)    -> writeStr([X, ' have 1  head...          ok']),
-			have_eyes(2)     -> writeStr([X, ' have 2  eyes...          ok']),
-			have_necks(1)    -> writeStr([X, ' have 1  necks...         ok']),
-			have_arms(2)     -> writeStr([X, ' have 2  arms...          ok']),
-			have_hands(2)    -> writeStr([X, ' have 2  hands...         ok']),
-			have_fingers(10) -> writeStr([X, ' have 10 fingers...       ok']),
-			have_legs(2)     -> writeStr([X, ' have 2  legs...          ok']),
-			have_foots(2,each_foot(X,have_teeth(10)))    -> writeStr([X, ' have 2  foots...         ok'])
-	;	writeStr(['query is wrong!']).
+have_eyes(X) :-
+		X is 2 -> true, writeln('has 2 eyes... ok')
+	;	writeln('eyes wrong')
+	;	fail.
 
 %% ----------------------------------------------- %%
 %% predicate to "join/add" string's in a list ...  %%
@@ -79,17 +63,7 @@ strcat(StringList, Result) :-
 	append(Lists, List),
 	atom_chars(Result, List).
 
-%% ----------------------------------------------- %%
-%% concat string list, then write list ...         %%
-%% ----------------------------------------------- %%
-writeStr(StringList) :-
-	strcat(StringList, Z),
-	writeln(Z).
-
-?- human(greta).
-?- human(paul).
-?- writef('\n').
-?- person(sonja).
+?- human(jens,have_eyes(2)).
 ?- halt(0).
 
 wort(paul,human).
