@@ -258,12 +258,3 @@ eat(X, Y) :-
 main :-
 	eat(cats, crimps),
 	halt(0).
-
-
-
-
-
-
-
-
-%<ski> paule32 : if you have a list `Words' (that could come from read_file/2), then you could use `forall(( member(Word,Words) ),( assertz(noun_sm(Word)) ))' in place of the repeat/0 - fail/0 failure-driven loop, to assert all the words to individual
